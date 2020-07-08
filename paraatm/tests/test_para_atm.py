@@ -94,19 +94,6 @@ class TestNatsSimulation(unittest.TestCase):
         # Basic consistency checks:
         self.assertEqual(len(df), 369)
 
-    def test_vcas(self):
-        cur_dir = os.path.dirname(os.path.abspath(__file__))
-        data_dir = os.path.join(cur_dir, '..', 'sample_data/')
-        cfg = {'fp_file': data_dir + 'vcas/ASU123at6000.trx',  # flight plan file
-               'mfl_file': data_dir + 'vcas/ASU123_mfl.trx',  # mfl file
-               'cmd_file': data_dir + 'vcas/command.csv',  # text command
-               'data_file': data_dir + 'vcas/ASU123.csv',  # actual trajectory data
-               'sim_time': 1000}  # total simulation time
-
-        sim = VCAS(cfg)
-        track = sim()['trajectory']
-        self.assertEqual(len(track), 1000)
-
 @unittest.skipIf(not USE_GNATS, "use NATS instead of GNATS")
 class TestGnatsSimulation(unittest.TestCase):
     # Note that for this test to run, GNATS must be installed and the
@@ -125,6 +112,19 @@ class TestGnatsSimulation(unittest.TestCase):
 
         # Basic consistency checks:
         self.assertEqual(len(df), 218)
+
+    def test_vcas(self):
+        cur_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(cur_dir, '..', 'sample_data/')
+        cfg = {'fp_file': data_dir + 'vcas/ASU123at6000.trx',  # flight plan file
+               'mfl_file': data_dir + 'vcas/ASU123_mfl.trx',  # mfl file
+               'cmd_file': data_dir + 'vcas/command.csv',  # text command
+               'data_file': data_dir + 'vcas/ASU123.csv',  # actual trajectory data
+               'sim_time': 1000}  # total simulation time
+
+        sim = VCAS(cfg)
+        track = sim()['trajectory']
+        self.assertEqual(len(track), 1000)
 
 class TestSklearnGP(unittest.TestCase):
     def test_1d(self):
